@@ -10,24 +10,23 @@ const News = (props)=>{
     const [loading, setloading] = useState(true)
     const [page, setpage] = useState(1)
     const [totalResults, settotalResults] = useState(0)
-    // document.title = `NewsWave - ${capitalizeFirstLetter(props.category)}`;
-  const capitalizeFirstLetter = (string) =>{
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  }
- 
-
-  const componentDidMount = async()=>{
-    // let url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=a2fd326252c74720bfc80e396c6f94e7&page=1&pagesize=${props.pagesize}`;
-    // setState({loading:true});
-    // let data = await fetch(url);
-    // let parsData = await data.json();
-    // setState(
-    //   {
-    //     articles:parsData.articles,
-    //     totalResults: parsData.totalResults,
-    //     loading: false
-    //   });
-    updateNews();
+    const capitalizeFirstLetter = (string) =>{
+      return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+    
+    
+    const componentDidMount = async()=>{
+      // let url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=a2fd326252c74720bfc80e396c6f94e7&page=1&pagesize=${props.pagesize}`;
+      // setState({loading:true});
+      // let data = await fetch(url);
+      // let parsData = await data.json();
+      // setState(
+        //   {
+          //     articles:parsData.articles,
+          //     totalResults: parsData.totalResults,
+          //     loading: false
+          //   });
+          updateNews();
   
   }
 
@@ -42,18 +41,19 @@ const News = (props)=>{
     setarticles(parsData.articles)
     settotalResults(parsData.totalResults)
     setloading(false)
-      props.setProgress(100);
+    props.setProgress(100);
   }
-
-  useEffect(() => {
-    updateNews();
   
+  useEffect(() => {
+    document.title = `NewsWave - ${capitalizeFirstLetter(props.category)}`;
+    updateNews();
+    
     return () => {
       
     }
   }, [])
   
-
+  
   const handleNextBtn = async() =>{
     // if(!(state.page + 1 > Math.ceil(state.totalResults/props.pagesize))){
     //   let url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=a2fd326252c74720bfc80e396c6f94e7&page=${state.page + 1}&pagesize=${props.pagesize}`;
@@ -90,8 +90,8 @@ const News = (props)=>{
 
   const fetchMoreData = async () => {
     // 20 more records in 1.5 secs
+    let url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${props.apiKey}&page=${page+1}&pagesize=${props.pagesize}`;
     setpage(page+1)
-    let url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${props.apiKey}&page=${page}&pagesize=${props.pagesize}`;
     let data = await fetch(url);
     let parsData = await data.json();
     setarticles(articles.concat(parsData.articles))
@@ -101,7 +101,7 @@ const News = (props)=>{
 
     return (
       <div>
-        <h2 className="text-center">Top {capitalizeFirstLetter(props.category)} Headlines</h2>
+        <h2 className="text-center" style={{marginTop:'70px'}}>Top {capitalizeFirstLetter(props.category)} Headlines</h2>
         {loading && <Spinner/>}
         <InfiniteScroll
           dataLength={articles.length}
